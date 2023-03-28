@@ -1,0 +1,13 @@
+<?php
+// get the user's IP address and username
+$ip = $_SERVER['REMOTE_ADDR'];
+$username = $_SERVER['REMOTE_USER'];
+
+// set up email variables
+$to = 'joshcameronbruce@gmail.com';
+$subject = 'New user information';
+$message = "Username: $username \nIP address: $ip";
+
+// send the email
+mail($to, $subject, $message);
+?>
