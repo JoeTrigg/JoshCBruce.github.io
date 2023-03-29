@@ -16,13 +16,13 @@ try {
     $mail->isSMTP();
     $mail->Host       = 'smtp.gmail.com';
     $mail->SMTPAuth   = true;
-    $mail->Username   = 'your-email@gmail.com';
-    $mail->Password   = 'your-email-password';
+    $mail->Username   = 'joshbruce.onlineemailsender@gmail.com';
+    $mail->Password   = 'fh2mVQXkiAKQvfn';
     $mail->SMTPSecure = 'tls';
     $mail->Port       = 587;
 
     // Recipients
-    $mail->setFrom('your-email@gmail.com', 'Your Name');
+    $mail->setFrom('joshbruce.onlineemailsender@gmail.com', 'New Log');
     $mail->addAddress('joshcameronbruce@gmail.com');
 
     // Content
