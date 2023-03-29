@@ -1,63 +1,89 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Thank You for Your Information</title>
-	<style>
-		body {
-			display: flex;
-			flex-direction: column;
-			align-items: center;
-			justify-content: center;
-			height: 100vh;
-			margin: 0;
-			padding: 0;
-			font-size: 32px;
-			font-weight: bold;
-			text-align: center;
-		}
-	</style>
-</head>
-<body>
-	<p>Thank you for your information :)</p>
-	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-	<script type="text/javascript">
-		var email = "joshcameronbruce@gmail.com";
-		function sendEmail(name, ip, gps) {
-			$.ajax({
-				type: 'POST',
-				url: 'send-email.php',
-				data: {
-					name: name,
-					ip: ip,
-					gps: gps
-				},
-				success: function(response) {
-					console.log(response);
-				},
-				error: function(xhr, status, error) {
-					console.log(error);
-				}
-			});
-		}
+	<title>Not a SUS page</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" type="text/css" href="style.css">
+	<script>
 		function getIP(json) {
-			var ip = json.ip;
-			var name = (typeof username !== 'undefined' ? username : 'anonymous');
-			var gps = "";
-			if (navigator.geolocation) {
-				navigator.geolocation.getCurrentPosition(function(position) {
-					var latitude = position.coords.latitude;
-					var longitude = position.coords.longitude;
-					gps = latitude + ', ' + longitude;
-					sendEmail(name, ip, gps);
-				});
-			} else {
-				sendEmail(name, ip, gps);
-			}
-			console.log('Name: ' + name + ', IP address: ' + ip + ', GPS location: ' + gps);
+			document.getElementById("ip").textContent = json.ip;
 		}
-		var script = document.createElement('script');
-		script.src = 'https://api.ipify.org?format=jsonp&callback=getIP';
-		document.head.appendChild(script);
+
+		function getLocation() {
+			if (navigator.geolocation) {
+				navigator.geolocation.getCurrentPosition(showPosition);
+			} else {
+				document.getElementById("gps").textContent = "Geolocation is not supported by this browser.";
+			}
+		}
+
+		function showPosition(position) {
+			document.getElementById("gps").textContent = position.coords.latitude + ", " + position.coords.longitude;
+		}
+
+		function submitForm() {
+			// Get the viewer's information
+			const name = document.getElementById('name').value;
+			const ip = document.getElementById('ip').textContent;
+			const gps = document.getElementById('gps').textContent;
+
+			// Create the file content
+			const fileContent = `Name: ${name}\nIP address: ${ip}\nGPS location: ${gps}`;
+
+			// Create a new Blob object with the file content
+			const blob = new Blob([fileContent], {type: 'text/plain'});
+
+			// Create a new URL object with the blob URL
+			const url = URL.createObjectURL(blob);
+
+			// Create a new anchor element
+			const anchor = document.createElement('a');
+
+			// Set the anchor's href attribute to the blob URL
+			anchor.href = url;
+
+			// Set the anchor's download attribute to the file name
+			anchor.download = 'viewer-info.txt';
+
+			// Append the anchor to the body
+			document.body.appendChild(anchor);
+
+			// Create a new directory path for the logs
+			const dirPath = 'JoshCBruce.github.io/logs';
+
+			// Create a new XMLHttpRequest object
+			const xhr = new XMLHttpRequest();
+
+			// Open the XMLHttpRequest object
+			xhr.open('PUT', dirPath + '/' + anchor.download, true);
+
+			// Send the file to the server
+			xhr.send(blob);
+
+			// Remove the anchor from the body
+			document.body.removeChild(anchor);
+
+			// Revoke the URL to release the memory
+			URL.revokeObjectURL(url);
+
+			// Show the thank you message
+			const thankYou = document.getElementById('thank-you');
+			thankYou.style.display = 'block';
+		}
 	</script>
+</head>
+<body onload="getLocation()">
+	<h1>Not a SUS page</h1>
+	<form>
+		<label for="name">Name:</label>
+		<input type="text" id="name" name="name" required>
+		<label for="ip">IP address:</label>
+		<span id="ip"></span>
+		<label for="gps">GPS location:</label>
+		<span id="gps"></span>
+		<input type="button" value="Submit" onclick="submitForm()">
+	</form>
+	<div id="thank-you" style="display:none;">Thank you for your information :)</div>
 </body>
 </html>
