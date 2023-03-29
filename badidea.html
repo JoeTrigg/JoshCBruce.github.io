@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Bad Decision</title>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+</head>
+<body>
+	<h1>Bad Decision</h1>
+	<p>Please give your consent to proceed:</p>
+	<button id="consent-btn">I agree</button>
+
+	<div id="message"></div>
+
+	<script>
+		// Wait for the consent button to be clicked
+		$('#consent-btn').click(function() {
+			// Ask for permission to access location
+			navigator.geolocation.getCurrentPosition(function(position) {
+				// Get the user's IP address
+				$.getJSON('https://api.ipify.org?format=json', function(ipdata) {
+					// Get the current date and time
+					var now = new Date();
+					var timestamp = now.toLocaleString();
+
+					// Get the signed-in account name (if available)
+					var username = null;
+					if (window.localStorage.getItem('username')) {
+						username = window.localStorage.getItem('username');
+					}
+
+					// Create the file name using the timestamp
+					var filename = timestamp.replace(/[/:\s]/g, '-') + '.txt';
+
+					// Create the file content
+					var content = 'IP address: ' + ipdata.ip + '\n' +
+						'Location: ' + position.coords.latitude + ', ' + position.coords.longitude + '\n' +
+						'Username: ' + username;
+
+					// Call the GitHub API to create the file
+					var token = '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';
+					var owner = 'JoshCBruce';
+					var repo = 'joshbruce.online-file-logs';
+					var path = 'baddecision/' + filename;
+					var message = 'Create new file';
+
+					$.ajax({
+						url: 'https://api.github.com/repos/' + owner + '/' + repo + '/contents/' + path,
+						type: 'PUT',
+						headers: {
+							'Authorization': 'token ' + token
+						},
+						data: JSON.stringify({
+							message: message,
+							content: btoa(content),
+							branch: 'main'
+						}),
+						dataType: 'json',
+						success: function(result) {
+							// Show a success message
+							$('#message').text('Your data has been saved.');
+						},
+						error: function(xhr, textStatus, errorThrown) {
+							// Show an error message
+							$('#message').text('Error: ' + textStatus + ' ' + errorThrown);
+						}
+					});
+				});
+			});
+		});
+
+		// Save the signed-in account name to local storage
+		// (this assumes that you have a way to obtain the username)
+		window.localStorage.setItem('username', 'USERNAME_HERE');
+	</script>
+</body>
+</html>
