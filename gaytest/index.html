@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Gay Checker</title>
+    <style>
+      body {
+        text-align: center;
+      }
+      form {
+        display: inline-block;
+        text-align: left;
+      }
+      input {
+        font-size: 1.2em;
+        font-weight: bold;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Gray Checker</h1>
+    <form>
+      <label for="name">Enter your name:</label>
+      <input type="text" id="name" name="name">
+      <button type="button" onclick="checkName()">Check</button>
+    </form>
+    <p id="result"></p>
+    <script>
+      function checkName() {
+        const name = document.getElementById("name").value;
+        const firstName = name.split(' ')[0].toLowerCase();
+        const isGray = (['a', 'c', 'e', 'g', 'i', 'k', 'm', 'o', 'q', 's', 'u', 'w', 'y'].indexOf(firstName.charAt(0)) !== -1);
+        const resultElement = document.getElementById("result");
+        if (isGray) {
+          resultElement.textContent = name + " is gay";
+        } else {
+          resultElement.textContent = name + " is not gay";
+        }
+      }
+    </script>
+  </body>
+</html>
