@@ -22,14 +22,20 @@
             color: white;
             text-decoration: none;
             border-radius: 5px;
+            cursor: pointer; /* Change the cursor to a pointer on hover */
         }
     </style>
+    <script>
+        function redirectTo(url) {
+            window.location.href = url; // Redirect to the specified URL
+        }
+    </script>
 </head>
 <body>
     <h1>Games Catalogue</h1>
-    <a class="button" href="blockman.html">BlockMan</a>
-    <a class="button" href="helicopter.html">Helicopter</a>
-    <a class="button" href="page3.html">Button 3</a>
+    <button class="button" onclick="redirectTo('https://joshbruce.online/tetris')">Tetris</button>
+    <button class="button" onclick="redirectTo('helicopter.html')">Button 2</button>
+    <button class="button" onclick="redirectTo('page3.html')">Button 3</button>
     <!-- Add more buttons as needed -->
 </body>
 </html>
