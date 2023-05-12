@@ -101,6 +101,7 @@ function isValidMove(matrix, cellRow, cellCol) {
   return true;
 }
 
+
 // place the tetromino on the playfield
 function placeTetromino() {
   for (let row = 0; row < tetromino.matrix.length; row++) {
@@ -119,13 +120,11 @@ function placeTetromino() {
 
   // check for line clears starting from the bottom and working our way up
   let linesCleared = 0;
-  for (let row = playfield.length - 1; row >= 0; ) {
+  for (let row = playfield.length - 1; row >= 0; row--) {
     if (playfield[row].every(cell => !!cell)) {
       linesCleared++;
       playfield.splice(row, 1);
-    }
-    else {
-      row--;
+      playfield.unshift(Array(10).fill(0));
     }
   }
 
@@ -285,7 +284,7 @@ function loop() {
   }
 
   // display the score
-  context.fillStyle = "black";
+  context.fillStyle = "white";
   context.font = "20px Arial";
   context.fillText("Score: " + score, 10, 30);
 }
